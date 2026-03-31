@@ -43,13 +43,37 @@ app.post('/' , function(req,res){
 })
 
 //Update
-app.put('/' , function(req,res){
+// app.put('/' , function(req,res){
+//     for(let i=0;i<user[0].Kidneys.length;i++){
+//         user[0].Kidneys[i].healthy=true;
+//     }
+//     res.json({
+//         msg:"Done!!"
+//     })
+// })
+
+//Lets write a better version of Put request here by applying status code 
+function isThereAtleastONEUnHealthyKidneys (){
+    let atlestOneUnHealthyKidneys = false;
     for(let i=0;i<user[0].Kidneys.length;i++){
+        if(!user[0].Kidneys.healthy){
+            atlestOneUnHealthyKidneys=true;
+        }
+    }
+    return atlestOneUnHealthyKidneys;
+}
+app.put('/' , function(req,res){
+    if(isThereAtleastONEUnHealthyKidneys()){
+        for(let i=0;i<user[0].Kidneys.length;i++){
         user[0].Kidneys[i].healthy=true;
     }
     res.json({
         msg:"Done!!"
     })
+    }
+    else{
+        res.sendStatus(411);
+    }
 })
 
 //Removing all unhealthy Kidneys
